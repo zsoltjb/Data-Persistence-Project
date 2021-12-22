@@ -5,14 +5,21 @@ using System.IO;
 using System;
 using UnityEditor;
 
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public int[] Scores = new int[10];
-    public string[] PlayerNames = new string[10];
+    //public int[] Scores = new int[10];
+    //public string[] PlayerNames = new string[10];
+    public KeepData scoreData { get; set; }
     public string playerName;
     public int score;
+
+    public GameManager()
+    {
+        scoreData = new KeepData();
+    }
 
     private void Awake()
     {
@@ -29,24 +36,21 @@ public class GameManager : MonoBehaviour
     }
 
     [System.Serializable]
-    class KeepData
+    public class KeepData
     {
         public int[] Scores = new int[10];
         public string[] PlayerNames = new string[10];
+        public ArrayList abc;
     }
     
     public void SaveData()
-    {
-        KeepData data = new KeepData();
-        data.PlayerNames = PlayerNames;
-        data.Scores = Scores;
-       
-
-        string json = JsonUtility.ToJson(data);
-
-        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    { 
+        string path = Application.persistentDataPath + "/savefile.json";
+        File.WriteAllText(path, JsonUtility.ToJson(scoreData));
+        Debug.Log($"file path: {path}");
 
     }
+
     //Load saved data at startup
     public void LoadData()
     {
@@ -55,20 +59,17 @@ public class GameManager : MonoBehaviour
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            KeepData data = JsonUtility.FromJson<KeepData>(json);
-
-            PlayerNames = data.PlayerNames;
-            Scores = data.Scores;
+            scoreData = JsonUtility.FromJson<KeepData>(json);
            
         }
     }
     //Place player's score and name into scoreboard if it's in the top 10
     public void HighScoreSorter(int score, string playerName)
     {
-        int scoreBeatenAtIndex = Array.FindIndex(Scores, el => el < score);
+        int scoreBeatenAtIndex = Array.FindIndex(scoreData.Scores, el => el < score);
         Debug.Log(scoreBeatenAtIndex);
-        List<int> tempScores = new List<int>(Scores);
-        List<string> tempNames = new List<string>(PlayerNames);
+        List<int> tempScores = new List<int>(scoreData.Scores);
+        List<string> tempNames = new List<string>(scoreData.PlayerNames);
         
         if (scoreBeatenAtIndex > -1)
         {
@@ -77,8 +78,8 @@ public class GameManager : MonoBehaviour
             tempNames.Insert(scoreBeatenAtIndex, playerName);
             tempNames.RemoveRange(10, tempNames.Count - 10);
 
-            Scores = tempScores.ToArray();
-            PlayerNames = tempNames.ToArray();
+            scoreData.Scores = tempScores.ToArray();
+            scoreData.PlayerNames = tempNames.ToArray();
 
         } else
         {
@@ -105,5 +106,9 @@ public class GameManager : MonoBehaviour
 #endif
 
     }
+
+
+
+
 
 }

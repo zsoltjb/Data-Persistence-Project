@@ -16,13 +16,13 @@ public class ScoreBoard : MonoBehaviour
         highScoreListCol1.text = "";
         highScoreListCol2.text = "";
         highScoreListCol3.text = "";
-        for (int i=0; i< GameManager.Instance.PlayerNames.Length; i++)
+        for (int i=0; i< GameManager.Instance.scoreData.PlayerNames.Length; i++)
         {
-            if (GameManager.Instance.Scores[i] != 0)
+            if (GameManager.Instance.scoreData.Scores[i] != 0)
             {
                 highScoreListCol1.text += $"{i + 1}.\n";
-                highScoreListCol2.text += $"{GameManager.Instance.PlayerNames[i]}\n";
-                highScoreListCol3.text += $"{GameManager.Instance.Scores[i]}\n";
+                highScoreListCol2.text += $"{GameManager.Instance.scoreData.PlayerNames[i]}\n";
+                highScoreListCol3.text += $"{GameManager.Instance.scoreData.Scores[i]}\n";
             }
             
         }

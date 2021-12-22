@@ -39,7 +39,7 @@ public class MainManager : MonoBehaviour
             }
         }
 
-        BestScoreText.text = $"Best Score: {GameManager.Instance.PlayerNames[0]} : {GameManager.Instance.Scores[0]}";
+        BestScoreText.text = $"Best Score: {GameManager.Instance.scoreData.PlayerNames[0]} : {GameManager.Instance.scoreData.Scores[0]}";
     }
 
     private void Update()
